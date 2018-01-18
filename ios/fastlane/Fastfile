@@ -1,0 +1,163 @@
+# Customise this file, documentation can be found here:
+# https://docs.fastlane.tools/actions/
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.61.0"
+
+default_platform :ios
+
+platform :ios do
+  before_all do
+    # cocoapods
+    # carthage
+  end
+
+  desc "Creates App on AppStore"
+  lane :publishStore do
+    produce(
+      username: ENV["APPLE_ID"],
+      app_identifier: ENV["APP_IDENTIFIER"],
+      app_name: ENV["APP_NAME"],
+      team_id: ENV["TEAM_ID"],
+      team_name: ENV["TEAM_NAME"],
+      itc_team_id: ENV["ITC_TEAM_ID"],
+      itc_team_name: ENV["ITC_TEAM_NAME"]
+    )
+
+    slack(
+      message: "*#{ENV["APP_NAME"]} (#{ENV["APP_IDENTIFIER"]}):* Created *new app*"
+    )
+  end
+
+  desc "Create Apple certificates"
+  lane :createCertificates do
+    match(
+      type: "development",
+      git_url: ENV["GIT_URL"],
+      app_identifier: ENV["APP_IDENTIFIER"],
+      username: ENV["APPLE_ID"],
+      team_id: ENV["TEAM_ID"],
+      team_name: ENV["TEAM_NAME"],
+    )
+    match(
+      type: "appstore",
+      git_url: ENV["GIT_URL"],
+      app_identifier: ENV["APP_IDENTIFIER"],
+      username: ENV["APPLE_ID"],
+      team_id: ENV["TEAM_ID"],
+      team_name: ENV["TEAM_NAME"],
+    )
+
+    slack(
+      message: "*#{ENV["APP_NAME"]} (#{ENV["APP_IDENTIFIER"]}):* Created *certificates*"
+    )
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    scan
+  end
+
+  desc "Submit a new Beta Build to Apple TestFlight"
+  desc "This will also make sure the profile is up to date"
+  lane :beta do
+    increment_build_number
+
+    slack(
+      message: "*#{ENV["APP_NAME"]} (#{ENV["APP_IDENTIFIER"]}):* Starting new submission to TestFlight: #{lane_context[SharedValues::BUILD_NUMBER]}"
+    )
+    
+    match(
+      type: "appstore",
+      git_url: ENV["GIT_URL"],
+      app_identifier: ENV["APP_IDENTIFIER"],
+      username: ENV["APPLE_ID"],
+      team_id: ENV["TEAM_ID"],
+      team_name: ENV["TEAM_NAME"],
+    )
+
+    gym(
+      export_method: "app-store",
+      scheme: ENV["SCHEME"],
+      clean: false
+    ) # Build your app - more options available
+    pilot(
+      distribute_external: true,
+      changelog: "Novas features e bug fixes",
+      beta_app_description: "Beta app description",
+      beta_app_feedback_email: "rafael.correia.poli@gmail.com",
+      email: "rafael.correia.poli@gmail.com",
+      first_name: "Rafael",
+      last_name: "Ribeiro Correia",
+      skip_waiting_for_build_processing: false,
+      dev_portal_team_id: ENV["TEAM_ID"],
+      username: ENV["APPLE_ID"],
+      apple_id: ENV["APPLE_ID"],
+      app_identifier: ENV["APP_IDENTIFIER"],
+      team_id: ENV["ITC_TEAM_ID"],
+      team_name: ENV["ITC_TEAM_NAME"],
+      testers_file_path: "../../assets/testers.csv",
+      groups: "Cliente"
+    )
+    clean_build_artifacts
+    commit_version_bump(
+      message: "Fastlane iOS: Release new build #{lane_context[SharedValues::BUILD_NUMBER]} [ci skip]",
+      xcodeproj: ENV["XCODE_PROJ"],
+      force: true
+    )
+    slack(
+      message: "*#{ENV["APP_NAME"]} (#{ENV["APP_IDENTIFIER"]}):* New build avaiable on TestFlight: #{lane_context[SharedValues::BUILD_NUMBER]}"
+    )
+    # sh "your_script.sh"
+    # You can also use other beta testing services here (run `fastlane actions`)
+  end
+
+  desc "Deploy a new version to the App Store"
+  lane :release do
+    # match(type: "appstore")
+    # snapshot
+    gym(
+      export_method: "app-store",
+      scheme: ENV["SCHEME"]
+    )
+    deliver(
+      force: true,
+      username: ENV["APPLE_ID"],
+      app_identifier: ENV["APP_IDENTIFIER"]
+    )
+    # frameit
+  end
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    slack(
+      message: "*#{ENV["APP_NAME"]} (#{ENV["APP_IDENTIFIER"]}):* Error\n#{exception.message}" ,
+      success: false
+    )
+  end
+end
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used. No personal data is recorded. 
+# Learn more at https://github.com/fastlane/fastlane#metrics

@@ -1,0 +1,45 @@
+{
+  "type": "REACT_NATIVE",
+  "template": "git@github.com:thunder-js/react-native-ts-lab.git",
+  "name": "Quick Quack",
+  "node": {
+    "packageName": "quick-quack"
+  },
+  "facebook": {
+    "appId": "",
+    "appDisplayName": "Quick Quack"
+  },
+  "googleMaps": {
+    "apiKey": ""
+  },
+  "assets": {
+    "icon": "",
+    "splash": ""
+  },
+  "ios": {
+    "displayName": "Quick Quack",
+    "projectName": "Quick-Quack",
+    "bundleIdentifier": "com.quack.customer",
+    "fastlane": {
+      "itcTeamName": "Rafael Ribeiro Correia",
+      "itcTeamId": "WRM4UPAZ5R",
+      "teamName": "Rafael Ribeiro Correia",
+      "teamId": "118298111",
+      "appleId": "rafael.correia.poli@gmail.com",
+      "certificatesRepoUrl": "git@github.com:rafaelcorreiapoli/apple-certificates.git",
+      "slackUrl": "https://hooks.slack.com/services/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"
+    },
+    "codePush": {
+      "staging": "",
+      "production": ""
+    }
+  },
+  "android": {
+    "displayName": "Quick Quack",
+    "bundleIdentifier": "com.quack.customer",
+    "codePush": {
+      "staging": "",
+      "production": ""
+    }
+  }
+}
