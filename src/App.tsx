@@ -20,7 +20,7 @@ export class App extends React.Component<{}, { hello: boolean }> {
   }
 
   private handleNextScreen = () => {
-    this.setState({
+    super.setState({
       hello: true
     })
   }
