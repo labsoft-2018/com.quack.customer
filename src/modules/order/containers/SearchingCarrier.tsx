@@ -3,6 +3,10 @@ import { SearchingCarrier } from '../components/SearchingCarrier'
 import { CarrierFound } from '../components/CarrierFound'
 import { Text } from 'react-native-ui-lib'
 import { NavigationComponentProps } from 'react-native-navigation'
+import { Screens } from '../../../navigation/screen-names'
+const EventEmitter = require('events').EventEmitter
+
+export const eventEmitter = new EventEmitter()
 
 enum SearchingState {
   SEARCHING,
@@ -23,7 +27,7 @@ export class SearchingCarrierContainer extends React.Component<NavigationCompone
       this.setState({
         searchingState: SearchingState.FOUND
       })
-    }, 4000)
+    }, 1)
   }
 
   private handleCancel = () => {
@@ -33,6 +37,13 @@ export class SearchingCarrierContainer extends React.Component<NavigationCompone
 
   private handleTrackOrderPress = () => {
     this.props.navigator.dismissAllModals()
+    eventEmitter.emit('switchToTab', 1)
+    setTimeout(() => {
+      eventEmitter.emit('push', {
+        screen: Screens.TrackOrder
+      })
+    }, 50)
+    
   }
 
   public render() {

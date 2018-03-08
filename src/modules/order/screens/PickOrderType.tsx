@@ -3,8 +3,9 @@ import ScreenWrapper from '../../common/components/ScreenWrapper'
 import { View, Text } from 'react-native-ui-lib'
 import { StyleSheet, ViewStyle, TouchableOpacity } from 'react-native'
 import { Colors } from '../../../resources/colors'
-import { NavigationComponentProps } from 'react-native-navigation'
+import { NavigationComponentProps, PushedScreen } from 'react-native-navigation'
 import { startReceiveFlow } from '../../../navigation/actions'
+import { eventEmitter } from '../containers/SearchingCarrier';
 
 export default class PickOrderTypeScreen extends React.Component<NavigationComponentProps> {
   public static navigatorStyle = {
@@ -13,6 +14,13 @@ export default class PickOrderTypeScreen extends React.Component<NavigationCompo
   }
   private handleReceivePackage = () => {
     startReceiveFlow(this.props.navigator)
+  }
+  componentDidMount() {
+    eventEmitter.on('switchToTab', (tabIndex) => {
+      this.props.navigator.switchToTab({
+        tabIndex
+      })
+    })
   }
   public render() {
     return (
