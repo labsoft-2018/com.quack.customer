@@ -35,4 +35,16 @@ if (module.hot) {
     clearCacheFor(require.resolve(signInScreenPath));
     redraw(() => require(signInScreenPath).default, Screens.SignIn);
   });
+
+  const pickOrderTypeScreenPath = './modules/order/screens/PickOrderType.tsx'
+  module.hot.accept(pickOrderTypeScreenPath, () => {
+    clearCacheFor(require.resolve(pickOrderTypeScreenPath));
+    redraw(() => require(pickOrderTypeScreenPath).default, Screens.PickOrderType);
+  });
+
+  const customerPositionScreenPath = './modules/order/screens/CustomerPosition.tsx'
+  module.hot.accept(customerPositionScreenPath, () => {
+    clearCacheFor(require.resolve(customerPositionScreenPath));
+    redraw(() => require(customerPositionScreenPath).default, Screens.CustomerPosition);
+  });
 }

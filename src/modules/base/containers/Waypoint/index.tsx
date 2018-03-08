@@ -23,7 +23,7 @@ class WaypointContainer extends React.Component<IWaypointContainerProps> {
 
   public async componentDidMount() {
     const token = await AsyncStorage.getItem('token')
-    const authenticated = !!token
+    const authenticated = !token
 
     this.props.onDecideNextScreen(authenticated)
   }

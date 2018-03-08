@@ -6844,6 +6844,10 @@ react-native-safe-module@^1.1.0:
   dependencies:
     dedent "^0.6.0"
 
+react-native-timeline-listview@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-timeline-listview/-/react-native-timeline-listview-0.2.3.tgz#e46b7f0fd2c2206329eee6194795e03899afe882"
+
 react-native-ui-lib@^3.3.32:
   version "3.3.32"
   resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-3.3.32.tgz#f6af8009c663df76ed8ad787d7d303d9a1cc2593"

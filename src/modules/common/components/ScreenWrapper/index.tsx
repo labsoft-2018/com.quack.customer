@@ -3,8 +3,9 @@ import { View, StyleSheet, ViewStyle } from 'react-native'
 
 const ScreenWrapper: React.SFC<any> = ({
   children,
+  style,
 }) => (
-  <View style={styles.wrapper}>
+  <View style={[styles.wrapper, style]}>
     {children}
   </View>
 )

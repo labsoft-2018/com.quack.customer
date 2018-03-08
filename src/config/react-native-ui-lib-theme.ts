@@ -5,6 +5,7 @@ export default () => {
   RNULColors.loadColors({
     light: Colors.WHITE,
     dark: Colors.DARK,
+    grey180: Colors.GRAY_180,
     primary: Colors.PRIMARY_COLOR,
   });
   Typography.loadTypographies({

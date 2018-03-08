@@ -33,6 +33,7 @@
     "react-native-maps": "^0.19.0",
     "react-native-modal": "^4.1.1",
     "react-native-navigation": "^1.1.328",
+    "react-native-timeline-listview": "^0.2.3",
     "react-native-ui-lib": "^3.3.32",
     "react-native-vector-icons": "^4.5.0",
     "socket.io-client": "^2.0.4"
