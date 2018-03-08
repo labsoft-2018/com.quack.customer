@@ -7,7 +7,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import { NavigationComponentProps } from 'react-native-navigation';
 import { TrackOrder } from '../components/TrackOrder'
 import { Screens } from '../../../navigation/screen-names'
-
+import { defaultNavigatorStyle } from '../../../resources/app-theme'
 
 export interface ICustomerPositionScreenState {
   page: number
@@ -23,15 +23,14 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
       {
         title: 'X',
         id: 'close',
-        buttonColor: 'blue',
-        buttonFontSize: 14,
-        buttonFontWeight: '600',
+        // buttonFontSize: 14,
+        // buttonFontWeight: '600',
       }
     ],
   };
 
   public static navigatorStyle = {
-    navBarHidden: false,
+    ...defaultNavigatorStyle,
     title: 'Teste'
   }
   constructor(props) {

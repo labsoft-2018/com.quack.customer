@@ -4,8 +4,14 @@ import { Text, Button, View } from 'react-native-ui-lib'
 import { Colors } from '../../../resources/colors';
 import { NavigationComponentProps } from 'react-native-navigation'
 import { Screens } from '../../../navigation/screen-names'
+import { defaultNavigatorStyle } from '../../../resources/app-theme'
 
 export class PickPaymentMethodScreen extends React.Component<NavigationComponentProps> {
+  public static navigatorStyle = {
+    ...defaultNavigatorStyle,
+    title: 'Teste'
+  }
+  
   private handleNext = () => {
     this.props.navigator.showModal({
       screen: Screens.SearchingCarrier,

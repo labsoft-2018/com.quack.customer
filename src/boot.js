@@ -7,12 +7,15 @@ import { newApolloClient } from './system/apollo-client'
 import { newSocketClient } from './system/socket-client'
 import { newConfig, Env } from './system/config'
 import { Screens } from './navigation/screen-names';
+import { StatusBar } from 'react-native';
+import { AppTheme } from './resources/app-theme';
 
 
 const boot = (env) => {
   const config = newConfig(env)
   const apolloClient = newApolloClient(config)
   const socketClient = newSocketClient(config)
+  StatusBar.setBarStyle(AppTheme.statusBarColor)
   configReactNativeUiLibTheme()
   registerScreens(apolloClient, socketClient)
   loadWaypoint()

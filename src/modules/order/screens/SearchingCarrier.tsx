@@ -5,8 +5,14 @@ import { Colors } from '../../../resources/colors';
 import { NavigationComponentProps } from 'react-native-navigation'
 import { SearchingCarrier } from '../components/SearchingCarrier'
 import { SearchingCarrierContainer } from '../containers/SearchingCarrier'
+import { defaultNavigatorStyle } from '../../../resources/app-theme'
 
 export class SearchingCarrierScreen extends React.Component<NavigationComponentProps> {
+  public static navigatorStyle = {
+    ...defaultNavigatorStyle,
+    title: 'Teste'
+  }
+  
   private handleCancel = () => {
     alert('cancel')
   }

@@ -10,3 +10,11 @@ export const AppTheme = {
   tabBarLabelColor: Colors.GRAY_180,
   tabBarSelectedLabelColor: Colors.PRIMARY_COLOR,
 }
+
+export const defaultNavigatorStyle = {
+  navBarHidden: false,
+  navBarButtonColor: AppTheme.navBarButtonColor,
+  navBarRightButtonColor: AppTheme.navBarButtonColor,
+  navBarBackgroundColor: AppTheme.navBarBackgroundColor,
+  navBarTextColor: AppTheme.navBarTextColor
+}

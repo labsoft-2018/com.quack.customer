@@ -6,10 +6,11 @@ import { Colors } from '../../../resources/colors'
 import { NavigationComponentProps, PushedScreen } from 'react-native-navigation'
 import { startReceiveFlow } from '../../../navigation/actions'
 import { eventEmitter } from '../containers/SearchingCarrier';
+import { defaultNavigatorStyle } from '../../../resources/app-theme'
 
 export default class PickOrderTypeScreen extends React.Component<NavigationComponentProps> {
   public static navigatorStyle = {
-    navBarHidden: false,
+    ...defaultNavigatorStyle,
     title: 'Teste',
   }
   private handleReceivePackage = () => {
