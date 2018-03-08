@@ -1,1 +1,1 @@
-export const BUNDLE_IDENTIFIER = 'com.thunder.newapp'
+export const BUNDLE_IDENTIFIER = 'com.quack.customer'

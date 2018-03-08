@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euxo pipefail
+
+function introspect_schema() {
+  yarn apollo-codegen introspect-schema https://api.graph.cool/simple/v1/cixos23120m0n0173veiiwrjr --output ./assets/schema.json
+}
+
+function generate_types() {
+  yarn apollo-codegen generate src/**/*.ts --schema assets/schema.json --target typescript --output src/operation-result-types.ts --addTypename
+}
+
+introspect_schema
+generate_types
+
+while true; do
+  watchman-wait ./src
+  RESULT=$?
+  if [[ $RESULT -ne 0 ]]; then
+    break
+  fi
+  sleep 0.5
+  generate_types
+done

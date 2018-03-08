@@ -1,27 +1,38 @@
+import 'haul/hot/patch'
 import { makeHot, tryUpdateSelf, callOnce, clearCacheFor, redraw } from 'haul/hot';
-import { Navigation } from 'react-native-navigation'
-import { BUNDLE_IDENTIFIER } from './resources/constants';
-import { registerScreens, getScreenName } from './screens';
+import registerScreens from './navigation/register-screens';
+import configReactNativeUiLibTheme from './config/react-native-ui-lib-theme'
+import { loadWaypoint } from './navigation/actions'
+import { newApolloClient } from './system/apollo-client'
+import { newSocketClient } from './system/socket-client'
+import { newConfig, Env } from './system/config'
+import { Screens } from './navigation/screen-names';
 
-const startApp = () => {
-  Navigation.startTabBasedApp({
-    tabs: [
-      {
-        label: 'One',
-        screen: getScreenName(BUNDLE_IDENTIFIER, 'App'), // this is a registered name for a screen
-        title: 'Screen One'
-      }
-    ]
-  });
+
+const boot = (env) => {
+  const config = newConfig(env)
+  const apolloClient = newApolloClient(config)
+  const socketClient = newSocketClient(config)
+  configReactNativeUiLibTheme()
+  registerScreens(apolloClient, socketClient)
+  loadWaypoint()
 }
 
-registerScreens()
-startApp()
+const env = __DEV__ ? Env.DEV : Env.PROD
+
+boot(env)
 
 if (module.hot) {
   module.hot.accept(() => {})
-  module.hot.accept('./App', () => {
-    clearCacheFor(require.resolve('./App'));
-    redraw(() => require('./App').default, getScreenName(BUNDLE_IDENTIFIER, 'App'));
-  });  
+  const waypointScreenPath = './modules/base/screens/Waypoint/index.tsx'
+  module.hot.accept(waypointScreenPath, () => {
+    clearCacheFor(require.resolve(waypointScreenPath));
+    redraw(() => require(waypointScreenPath).default, Screens.Waypoint);
+  });
+
+  const signInScreenPath = './modules/auth/screens/SignIn/index.tsx'
+  module.hot.accept(signInScreenPath, () => {
+    clearCacheFor(require.resolve(signInScreenPath));
+    redraw(() => require(signInScreenPath).default, Screens.SignIn);
+  });
 }
