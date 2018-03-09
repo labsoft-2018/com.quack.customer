@@ -27,7 +27,7 @@ export class SearchingCarrierContainer extends React.Component<NavigationCompone
       this.setState({
         searchingState: SearchingState.FOUND
       })
-    }, 1)
+    }, 10000)
   }
 
   private handleCancel = () => {

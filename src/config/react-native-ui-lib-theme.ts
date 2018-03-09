@@ -3,10 +3,13 @@ import { Colors } from '../resources/colors'
 
 export default () => {
   RNULColors.loadColors({
+    primary: Colors.PRIMARY_COLOR,
+    secondary: Colors.SECONDARY_COLOR,
     light: Colors.WHITE,
     dark: Colors.DARK,
+    white: Colors.WHITE,
     grey180: Colors.GRAY_180,
-    primary: Colors.PRIMARY_COLOR,
+    success: Colors.SUCCESS,
   });
   Typography.loadTypographies({
     h1: {fontSize: 58, fontWeight: '300'},

@@ -17,7 +17,7 @@ export const CarrierFound: React.SFC<{
       <Text h5 center marginT-40>Motoboy encontrado: {name}</Text>
     </View>
     <Button
-      backgroundColor={Colors.PRIMARY_COLOR}
+      background-success
       label='Acompanhar entrega'
       size='large'
       fullWidth

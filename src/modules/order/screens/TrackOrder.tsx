@@ -4,7 +4,7 @@ import { NavigationComponentProps } from 'react-native-navigation'
 import { TrackOrder } from '../components/TrackOrder'
 import { defaultNavigatorStyle } from '../../../resources/app-theme'
 
-export class TrackOrderScreen extends React.Component<NavigationComponentProps> {
+export default class TrackOrderScreen extends React.Component<NavigationComponentProps> {
   public static navigatorStyle = {
     ...defaultNavigatorStyle,
     title: 'Teste'

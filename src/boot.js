@@ -50,4 +50,16 @@ if (module.hot) {
     clearCacheFor(require.resolve(customerPositionScreenPath));
     redraw(() => require(customerPositionScreenPath).default, Screens.CustomerPosition);
   });
+
+  const myOrdersScreenPath = './modules/order/screens/MyOrders.tsx'
+  module.hot.accept(myOrdersScreenPath, () => {
+    clearCacheFor(require.resolve(myOrdersScreenPath));
+    redraw(() => require(myOrdersScreenPath).MyOrdersScreen, Screens.MyOrders);
+  });
+
+  const trackOrderScreenPath = './modules/order/screens/TrackOrder.tsx'
+  module.hot.accept(trackOrderScreenPath, () => {
+    clearCacheFor(require.resolve(trackOrderScreenPath));
+    redraw(() => require(trackOrderScreenPath).TrackOrderScreen, Screens.TrackOrder);
+  });
 }

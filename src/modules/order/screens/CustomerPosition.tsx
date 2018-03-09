@@ -58,8 +58,10 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
         <ScrollView>
           <View padding-20>
             <Text h3 center marginB-10>Retirada</Text>
-            <Text h5 grey180 center marginB-20>Como a gente faz pra pegar o pacote</Text>
+            <Text h5 grey180 center marginB-20>Como a gente faz pra pegar o pacote?</Text>
             <Button
+              background-secondary
+              white
               size="small"
               label="Buscar endereço"
               marginB-20
@@ -83,6 +85,8 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
             <Text h3 center marginB-10>Entrega</Text>
             <Text h5 grey180 center marginB-20>Como a gente faz pra te encontrar?</Text>
             <Button
+              background-secondary
+              white
               size="small"
               label="Buscar endereço"
               marginB-20
@@ -95,7 +99,8 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
           </View>
 
           <Button
-            backgroundColor={Colors.PRIMARY_COLOR}
+            background-primary
+            white
             label='Próximo'
             size='large'
             fullWidth
