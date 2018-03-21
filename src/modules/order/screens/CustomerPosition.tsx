@@ -11,8 +11,8 @@ import { defaultNavigatorStyle } from '../../../resources/app-theme'
 import RNGooglePlaces from 'react-native-google-places';
 
 export interface ICustomerPositionScreenState {
-  withdrawalLocation: ILocation,
-  deliveryLocation: ILocation,
+  sourceLocation: ILocation,
+  destLocation: ILocation,
   withdrawalInstructions: string,
   deliveryInstructions: string,
   contactNumber: string,
@@ -34,11 +34,19 @@ const googlePlacesPlaceToLocation = (googlePlaces): ILocation => {
 
 export default class CustomerPositionScreen extends React.Component<NavigationComponentProps, ICustomerPositionScreenState> {
   public state = {
-    withdrawalLocation: null,
-    deliveryLocation: null,
-    withdrawalInstructions: '',
-    deliveryInstructions: '',
-    contactNumber: '',
+    sourceLocation: {
+      lat: 1,
+      lng: 2,
+      address: 'add'
+    },
+    destLocation: {
+      lat: 11,
+      lng: 22,
+      address: 'add2'
+    },
+    withdrawalInstructions: 'with',
+    deliveryInstructions: 'del',
+    contactNumber: '1234',
   }
   private scrollView: ScrollViewStatic
 
@@ -73,30 +81,33 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
   }
   private handleNext = () => {
     this.props.navigator.push({
-      screen: Screens.PickPaymentMethod
+      screen: Screens.PickPaymentMethod,
+      passProps: {
+        order: this.state,
+      },
     })
   }
 
   private handleLocationPickerError = (error) => {
     Alert.alert(error.message)
   }
-  private handleWithdrawalLocation = () => {
+  private handlesourceLocation = () => {
     RNGooglePlaces.openPlacePickerModal()
-      .then((place) => {
-        this.setState({
-          withdrawalLocation: googlePlacesPlaceToLocation(place)
-        })
+    .then((place) => {
+      this.setState({
+        sourceLocation: googlePlacesPlaceToLocation(place)
       })
-      .catch(this.handleLocationPickerError)
+    })
+    .catch(this.handleLocationPickerError)
   }
   private handleDeliveryLocation = () => {
     RNGooglePlaces.openPlacePickerModal()
-      .then((place) => {
-        this.setState({
-          deliveryLocation: googlePlacesPlaceToLocation(place)
-        })
+    .then((place) => {
+      this.setState({
+        destLocation: googlePlacesPlaceToLocation(place)
       })
-      .catch(this.handleLocationPickerError)
+    })
+    .catch(this.handleLocationPickerError)
   }
 
   private handleChangeText = (input) => (text: string) => {
@@ -112,28 +123,28 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
             <Text h3 center marginB-10>Retirada</Text>
             <Text h5 grey180 center marginB-20>Como a gente faz pra pegar o pacote?</Text>
             {
-              this.state.withdrawalLocation &&
+              this.state.sourceLocation &&
               <Text center marginB-20>
-                {this.state.withdrawalLocation.address}
+                {this.state.sourceLocation.address}
               </Text>
             }
             <Button
               background-secondary
               white
               size="small"
-              label={this.state.withdrawalLocation ? 'Mudar endereço' : 'Buscar endereço'}
-              onPress={this.handleWithdrawalLocation}
+              label={this.state.sourceLocation ? 'Mudar endereço' : 'Buscar endereço'}
+              onPress={this.handlesourceLocation}
               marginB-20
             />
 
-            <Text h5>Instruções</Text>
+            <Text h5 marginB-20>Instruções</Text>
             <TextInput
               value={this.state.withdrawalInstructions}
               onChangeText={this.handleChangeText('withdrawalInstructions')}
               multiline
             />
 
-            <Text>Qual o número da pessoa que está com os pacote?</Text>
+            <Text marginB-20>Qual o número da pessoa que está com os pacote?</Text>
             <TextInput
               marginT-10
               value={this.state.contactNumber}
@@ -148,21 +159,21 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
             <Text h3 center marginB-10>Entrega</Text>
             <Text h5 grey180 center marginB-20>Como a gente faz pra entregar o pacote?</Text>
             {
-              this.state.deliveryLocation &&
+              this.state.destLocation &&
               <Text center marginB-20>
-                {this.state.deliveryLocation.address}
+                {this.state.destLocation.address}
               </Text>
             }
             <Button
               background-secondary
               white
               size="small"
-              label={this.state.deliveryLocation ? 'Mudar endereço' : 'Buscar endereço'}
+              label={this.state.destLocation ? 'Mudar endereço' : 'Buscar endereço'}
               onPress={this.handleDeliveryLocation}
               marginB-20
             />
 
-            <Text h5>Instruções</Text>
+            <Text h5 marginB-20>Instruções</Text>
             <TextInput
               value={this.state.deliveryInstructions}
               onChangeText={this.handleChangeText('deliveryInstructions')}
