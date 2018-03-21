@@ -55,3 +55,5 @@ dist
 
 *.dSYM.zip
 *.dSYM
+
+ios/Pods

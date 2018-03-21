@@ -1,20 +1,44 @@
 import * as React from 'react'
 import ScreenWrapper from '../../common/components/ScreenWrapper'
 import { View, Text, TextInput, Button } from 'react-native-ui-lib'
-import { StyleSheet, ViewStyle, TouchableOpacity, TextStyle, ScrollView, Dimensions, ScrollViewStatic, ScrollViewProps, ActivityIndicator } from 'react-native'
+import { StyleSheet, ViewStyle, TouchableOpacity, TextStyle, ScrollView, Dimensions, ScrollViewStatic, ScrollViewProps, ActivityIndicator, Alert } from 'react-native'
 import { Colors } from '../../../resources/colors'
 import Feather from 'react-native-vector-icons/Feather'
 import { NavigationComponentProps } from 'react-native-navigation';
 import { TrackOrder } from '../components/TrackOrder'
 import { Screens } from '../../../navigation/screen-names'
 import { defaultNavigatorStyle } from '../../../resources/app-theme'
+import RNGooglePlaces from 'react-native-google-places';
 
 export interface ICustomerPositionScreenState {
-  page: number
+  withdrawalLocation: ILocation,
+  deliveryLocation: ILocation,
+  withdrawalInstructions: string,
+  deliveryInstructions: string,
+  contactNumber: string,
 }
+
+export interface ILocation {
+  lat: number,
+  lng: number,
+  address: string,
+}
+
+const googlePlacesPlaceToLocation = (googlePlaces): ILocation => {
+  return {
+    lat: googlePlaces.latitude,
+    lng: googlePlaces.longitude,
+    address: googlePlaces.address,
+  }
+}
+
 export default class CustomerPositionScreen extends React.Component<NavigationComponentProps, ICustomerPositionScreenState> {
   public state = {
-    page: 0
+    withdrawalLocation: null,
+    deliveryLocation: null,
+    withdrawalInstructions: '',
+    deliveryInstructions: '',
+    contactNumber: '',
   }
   private scrollView: ScrollViewStatic
 
@@ -52,6 +76,34 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
       screen: Screens.PickPaymentMethod
     })
   }
+
+  private handleLocationPickerError = (error) => {
+    Alert.alert(error.message)
+  }
+  private handleWithdrawalLocation = () => {
+    RNGooglePlaces.openPlacePickerModal()
+      .then((place) => {
+        this.setState({
+          withdrawalLocation: googlePlacesPlaceToLocation(place)
+        })
+      })
+      .catch(this.handleLocationPickerError)
+  }
+  private handleDeliveryLocation = () => {
+    RNGooglePlaces.openPlacePickerModal()
+      .then((place) => {
+        this.setState({
+          deliveryLocation: googlePlacesPlaceToLocation(place)
+        })
+      })
+      .catch(this.handleLocationPickerError)
+  }
+
+  private handleChangeText = (input) => (text: string) => {
+    this.setState({
+      [input]: text,
+    })
+  }
   public render() {
     return (
       <ScreenWrapper>
@@ -59,22 +111,33 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
           <View padding-20>
             <Text h3 center marginB-10>Retirada</Text>
             <Text h5 grey180 center marginB-20>Como a gente faz pra pegar o pacote?</Text>
+            {
+              this.state.withdrawalLocation &&
+              <Text center marginB-20>
+                {this.state.withdrawalLocation.address}
+              </Text>
+            }
             <Button
               background-secondary
               white
               size="small"
-              label="Buscar endereço"
+              label={this.state.withdrawalLocation ? 'Mudar endereço' : 'Buscar endereço'}
+              onPress={this.handleWithdrawalLocation}
               marginB-20
             />
 
             <Text h5>Instruções</Text>
             <TextInput
+              value={this.state.withdrawalInstructions}
+              onChangeText={this.handleChangeText('withdrawalInstructions')}
               multiline
             />
 
             <Text>Qual o número da pessoa que está com os pacote?</Text>
             <TextInput
               marginT-10
+              value={this.state.contactNumber}
+              onChangeText={this.handleChangeText('contactNumber')}
               placeholder="(xx) xxxxx-xxxx"
             />
           </View>
@@ -83,17 +146,26 @@ export default class CustomerPositionScreen extends React.Component<NavigationCo
 
           <View padding-20>
             <Text h3 center marginB-10>Entrega</Text>
-            <Text h5 grey180 center marginB-20>Como a gente faz pra te encontrar?</Text>
+            <Text h5 grey180 center marginB-20>Como a gente faz pra entregar o pacote?</Text>
+            {
+              this.state.deliveryLocation &&
+              <Text center marginB-20>
+                {this.state.deliveryLocation.address}
+              </Text>
+            }
             <Button
               background-secondary
               white
               size="small"
-              label="Buscar endereço"
+              label={this.state.deliveryLocation ? 'Mudar endereço' : 'Buscar endereço'}
+              onPress={this.handleDeliveryLocation}
               marginB-20
             />
 
-            <Text h5>Instruções para te encontrar</Text>
+            <Text h5>Instruções</Text>
             <TextInput
+              value={this.state.deliveryInstructions}
+              onChangeText={this.handleChangeText('deliveryInstructions')}
               multiline
             />
           </View>
