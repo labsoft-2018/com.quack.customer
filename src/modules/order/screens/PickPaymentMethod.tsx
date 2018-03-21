@@ -70,7 +70,7 @@ class PickPaymentMethod extends React.Component<NavigationComponentProps & IPick
       Alert.alert(`Order created: ${orderId}`)
       
     } catch (err) {
-      console.log(err)
+      Alert.alert(err.toString())
     }
     
 
@@ -116,6 +116,6 @@ export interface IChildProps {
 }
 export const PickPaymentMethodScreen = graphql<{}, {}, IChildProps>(CREATE_ORDER, {
   props: ({ mutate }) => ({
-    createOrder: ({ order, paymentInfo }) => mutate({ variables: { order, paymentInfo } }),
+    createOrder: (order, paymentInfo) => mutate({ variables: { order, paymentInfo } }),
   }),
 })(PickPaymentMethod)
