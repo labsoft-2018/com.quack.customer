@@ -10,18 +10,24 @@ import { graphql } from 'react-apollo'
 import { CREATE_ORDER } from '../mutations/create-order'
 import { Alert } from 'react-native';
 
+export interface IPaymentInfo {
+  cardId: string
+}
+export interface IOrder {
+  sourceLocation: ILocation,
+  destLocation: ILocation,
+  withdrawalInstructions: string,
+  deliveryInstructions: string,
+  contactNumber: string,
+}
+
 export interface IPickPaymentMethodScreenState {
   cardId: string
 }
+
 export interface IPickPaymentMethodScreenProps {
-  order: {
-    sourceLocation: ILocation,
-    destLocation: ILocation,
-    withdrawalInstructions: string,
-    deliveryInstructions: string,
-    contactNumber: string,
-  }
-  createOrder: ({ order, paymentInfo }) => Promise<any>
+  order: IOrder,
+  createOrder: (order: IOrder, paymdentInfo: IPaymentInfo) => Promise<any>
 }
 
 class PickPaymentMethod extends React.Component<NavigationComponentProps & IPickPaymentMethodScreenProps, IPickPaymentMethodScreenState> {
@@ -44,21 +50,21 @@ class PickPaymentMethod extends React.Component<NavigationComponentProps & IPick
         sourceLocation: {
           lat: this.props.order.sourceLocation.lat,
           lng:  this.props.order.sourceLocation.lng,
+          address:  this.props.order.sourceLocation.address,
         },
         destLocation: {
           lat: this.props.order.destLocation.lat,
           lng: this.props.order.destLocation.lng,
+          address: this.props.order.destLocation.address,
         },
         withdrawalInstructions: this.props.order.withdrawalInstructions,
         deliveryInstructions: this.props.order.deliveryInstructions,
         contactNumber: this.props.order.contactNumber,
       }
-      const response = await this.props.createOrder({
-        order,
-        paymentInfo: {
-          cardId: this.state.cardId,
-        }
-      })
+      const paymentInfo = {
+        cardId: this.state.cardId,
+      }
+      const response = await this.props.createOrder(order, paymentInfo)
 
       const orderId = response.data.createOrder.id
       Alert.alert(`Order created: ${orderId}`)
@@ -92,10 +98,6 @@ class PickPaymentMethod extends React.Component<NavigationComponentProps & IPick
 
           </TextInput>
         </View>
-        <Text>
-          {JSON.stringify(this.props.sourceLocation)}
-        </Text>
-        
         <Button
           backgroundColor={Colors.PRIMARY_COLOR}
           label='Próximo'
@@ -109,7 +111,10 @@ class PickPaymentMethod extends React.Component<NavigationComponentProps & IPick
   }
 }
 
-export const PickPaymentMethodScreen = graphql(CREATE_ORDER, {
+export interface IChildProps {
+  createOrder: (order: IOrder, paymdentInfo: IPaymentInfo) => Promise<any>
+}
+export const PickPaymentMethodScreen = graphql<{}, {}, IChildProps>(CREATE_ORDER, {
   props: ({ mutate }) => ({
     createOrder: ({ order, paymentInfo }) => mutate({ variables: { order, paymentInfo } }),
   }),
